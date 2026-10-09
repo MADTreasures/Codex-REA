@@ -1,0 +1,4 @@
+[mcp_servers.rea]
+command = "/workspace/Codex-REA/cloud/re/start-rea.sh"
+args = ["mcp"]
+# Merge this section into an intended Codex configuration after review.
