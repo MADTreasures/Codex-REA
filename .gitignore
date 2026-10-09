@@ -1,0 +1,13 @@
+# Proprietary packages, local runtime data, secrets and analysis evidence.
+*.deb
+*.rpm
+*.pkg.tar.xz
+*.elf
+*.pem
+*.key
+.env
+work/
+output/
+.rea-cli/
+**/*-results.json
+**/*.log
