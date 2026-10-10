@@ -1,4 +1,4 @@
-# Proprietary packages, local runtime data, secrets and analysis evidence.
+# Proprietary packages, local runtime data, secrets and raw analysis evidence.
 *.deb
 *.rpm
 *.pkg.tar.xz
@@ -11,3 +11,12 @@ output/
 .rea-cli/
 **/*-results.json
 **/*.log
+
+# User-selected ELF inputs and reviewed result JSON belong in these folders.
+!/Target/**/*.elf
+!/Disassembled/**/*-results.json
+
+# Keep native project caches and raw logs out of version control.
+/Disassembled/**/.cache/
+/Disassembled/**/.work/
+/Disassembled/**/raw-logs/
