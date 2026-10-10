@@ -1,7 +1,8 @@
-# Proprietary packages, local runtime data, secrets and raw analysis evidence.
+# Proprietary packages, input binaries, secrets and raw analysis evidence.
 *.deb
 *.rpm
 *.pkg.tar.xz
+*.exe
 *.elf
 *.pem
 *.key
@@ -12,11 +13,22 @@ output/
 **/*-results.json
 **/*.log
 
-# User-selected ELF inputs and reviewed result JSON belong in these folders.
-!/Target/**/*.elf
+# Inputs are downloaded outside the checkout; do not recreate the old input folder.
+/Target/
+/downloads/
+/.analysis-inputs/
+
+# Reviewed result JSON belongs in the report tree.
 !/Disassembled/**/*-results.json
 
-# Keep native project caches and raw logs out of version control.
+# Native caches, raw logs and large archives are not normal Git outputs.
 /Disassembled/**/.cache/
 /Disassembled/**/.work/
 /Disassembled/**/raw-logs/
+/Disassembled/**/*.zip
+/Disassembled/**/*.7z
+/Disassembled/**/*.tar
+/Disassembled/**/*.tar.*
+/Disassembled/**/*.gz
+/Disassembled/**/*.zst
+/Disassembled/**/*.part-*
