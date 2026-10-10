@@ -68,16 +68,23 @@ source /workspace/.re-cloud-setup/activate.sh
 rea analyze /pfad/zur/binaerdatei --provider ghidra
 ```
 
-Für Eingaben und Ergebnisse gelten die aktuellen Regeln aus `AGENTS.md`:
-Lade die im Auftrag benannte externe Datei außerhalb des Repositorys herunter.
-Prüfe Format, Größe und SHA-256; führe die Eingabe nicht aus und ändere sie nicht.
-Der frühere Ordner `Target/` wurde entfernt und darf nicht neu angelegt werden.
-Speichere geprüfte kleine Berichte in einem neuen Unterordner von `Disassembled/`.
-Große Exporte bleiben außerhalb des Checkouts und werden bei entsprechender
-Freigabe als Release-Anhänge oder beim vereinbarten externen Speicher abgelegt.
-Ein kleines Artefaktverzeichnis dokumentiert Größe, Prüfsummen und bestätigte
-Uploadorte ohne private Tokens. Eingaben, große Archive und Rohlogs nicht committen.
-Veröffentlichung nur nach entsprechendem Auftrag und Prüfung der Ergebnisdateien.
+Für Eingaben und Ergebnisse gelten die aktuellen Dropbox-Regeln aus `AGENTS.md`.
+Lade die im Auftrag benannte Datei außerhalb des Repositorys herunter. Prüfe
+Format, Größe und SHA-256; führe die Eingabe nicht aus und ändere sie nicht.
+Die Repository-Ordner `Target/` und `Disassembled/` sind entfernt und dürfen
+nicht neu angelegt werden. Gleichnamige Ordner in Dropbox sind davon getrennt.
+
+Speichere sämtliche Berichte, Text-/JSON-Ergebnisse, Prüfsummenverzeichnisse und
+gegebenenfalls große Archive ausschließlich im autorisierten Dropbox-Ziel.
+Nutze lokale Arbeitsverzeichnisse außerhalb des Git-Checkouts. Prüfe vor einer
+umfangreichen Analyse den tatsächlichen Download-, Dateiübergabe- und Uploadweg.
+Ein Leselink oder eine installierte App allein beweist keinen Schreibzugriff
+auf lokale Dateien dieser Cloud-Aufgabe. Fehlt der Zugriff, melde den Blocker.
+
+Keine Ergebnis-Commits, Pull Requests, Release-Anhänge oder LFS-Uploads auf GitHub.
+Keine bestehenden Dropbox-Dateien überschreiben und keine öffentlichen Links
+ungefragt erstellen. Melde Upload-Erfolg erst nach tatsächlicher Übertragung
+und Remote-Prüfung; ohne Upload bleiben Ergebnisse nur lokal gespeichert.
 
 Ghidra benötigt temporäre Projekt-, Bridge- und Logdateien. Behandle das
 Analyseziel als unveränderlich und beachte zusätzliche Vorgaben des Nutzers zu
@@ -90,9 +97,9 @@ fehlenden Installation. Leite daraus keine Neuinstallation ab.
 - Ersetze keine vorhandenen Installations- oder Aktivierungsskripte.
 - Lade REA, Ghidra und Java nicht erneut herunter.
 - Übernimm keine Zugangsdaten, Eingabebinärdateien, heruntergeladenen
-  Analyseprogramme, Installationen oder privaten Rohlogs ins Repository.
-  Geprüfte kleine Ergebnisse in `Disassembled/` sind nach `AGENTS.md` vorgesehen;
-  die Anweisung ersetzt das frühere pauschale Artefaktverbot und die Target-Regeln.
+  Analyseprogramme, Installationen, Analyseergebnisse oder privaten Rohlogs ins
+  Repository. Auch kleine Berichte gehören jetzt nach Dropbox; ältere
+  GitHub-Ergebnisregeln sind durch `AGENTS.md` ersetzt.
 - Melde fehlende Pfade, unerwartete Versionen und fehlgeschlagene Befehle genau.
   Behaupte bei einem fehlgeschlagenen oder ausgelassenen geforderten Test keinen
   vollständigen Starterfolg.
