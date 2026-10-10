@@ -68,6 +68,13 @@ source /workspace/.re-cloud-setup/activate.sh
 rea analyze /pfad/zur/binaerdatei --provider ghidra
 ```
 
+Für den vom Nutzer gewünschten Ordnerablauf gelten die Regeln aus `AGENTS.md`:
+Zieldateien aus `Target/` nur lesen, nicht ausführen oder ändern. Tatsächlich
+erzeugte Berichte und Text-/JSON-Ergebnisse in einem neuen Unterordner von
+`Disassembled/` speichern. Eingabeintegrität prüfen und vorhandene Ergebnisse
+nicht überschreiben. Eine Veröffentlichung auf GitHub nur nach entsprechendem
+Auftrag und nach Prüfung der Ergebnisdateien vornehmen.
+
 Ghidra benötigt temporäre Projekt-, Bridge- und Logdateien. Behandle das
 Analyseziel als unveränderlich und beachte zusätzliche Vorgaben des Nutzers zu
 temporären Dateien. Scheitert ein Unterprozess mit `EPERM`, melde den exakten
@@ -78,13 +85,14 @@ fehlenden Installation. Leite daraus keine Neuinstallation ab.
 
 - Ersetze keine vorhandenen Installations- oder Aktivierungsskripte.
 - Lade REA, Ghidra und Java nicht erneut herunter.
-- Übernimm keine Zugangsdaten, Binärprogramme, Installationen oder
-  Analyse-Artefakte ins Repository.
+- Übernimm keine Zugangsdaten, heruntergeladenen Analyseprogramme, Installationen
+  oder privaten Rohlogs ins Repository. Bewusst bereitgestellte Eingaben in
+  `Target/` und geprüfte Ergebnisse in `Disassembled/` sind nach den Regeln aus
+  `AGENTS.md` vorgesehen; das frühere pauschale Artefaktverbot gilt dafür nicht.
 - Melde fehlende Pfade, unerwartete Versionen und fehlgeschlagene Befehle genau.
   Behaupte bei einem fehlgeschlagenen oder ausgelassenen geforderten Test keinen
   vollständigen Starterfolg.
-- Die automatische Skill-Erkennung ist noch nicht in einer frischen
-  Cloud-Aufgabe geprüft. Ein Dateilesen in dieser laufenden Aufgabe beweist sie
-  nicht. Prüfe sie später in einer neuen Aufgabe mit diesem Repository und dem
-  Commit beziehungsweise Branch, der diesen Skill enthält. Unterscheide dabei
-  die Erkennung im Skill-Katalog von einem manuellen Öffnen der Datei.
+- Die automatische Skill-Erkennung ist weiterhin nicht nachgewiesen und keine
+  Voraussetzung für den Ordnerablauf. Lies die vorhandenen Anweisungen bei
+  Bedarf direkt. Untersuche die Erkennung nur auf ausdrücklichen Auftrag;
+  manuelles Lesen ist kein Beleg für einen Eintrag im Skill-Katalog.
