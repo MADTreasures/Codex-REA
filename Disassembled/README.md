@@ -1,41 +1,61 @@
 # Disassembled – Analyseergebnisse
 
-Hier speichert Codex die Ergebnisse von ausdrücklich beauftragten Analysen der
-Dateien aus `Target/`. Pro Eingabedatei und Lauf wird ein eigener Unterordner
-angelegt; vorhandene Ergebnisse werden nicht überschrieben.
+Hier liegen geprüfte Berichte und kleine Ergebnisse ausdrücklich beauftragter
+Analysen. Eingaben kommen über eine im Auftrag genannte externe Downloadquelle
+und liegen nur im Cloud-Arbeitsverzeichnis außerhalb des Repositorys.
+Der frühere Eingabeordner `Target/` ist nicht mehr Bestandteil dieses Ablaufs.
 
-Beispielstruktur (noch keine Analyse durchgeführt):
+Pro Datei und Lauf wird ein eigener Unterordner angelegt. Beispiel, nicht das
+Ergebnis einer bereits ausgeführten Analyse:
 
 ```text
 Disassembled/
 └── meinprogramm.exe/
     └── <UTC-Zeitstempel>-<SHA256-Kurzform>/
         ├── report.md
-        ├── analysis.json
-        ├── functions.csv
-        ├── strings.txt
-        ├── disassembly.txt
-        └── pseudocode.c
+        ├── functions.csv       # nur bei tatsächlich gewonnenen Ergebnissen
+        ├── analysis.json       # nur soweit klein genug und zur Veröffentlichung geeignet
+        └── artifacts.json      # Verzeichnis großer externer/Release-Artefakte
 ```
 
-`report.md` dokumentiert mindestens Eingabepfad, SHA-256, Dateiformat,
-Architektur, verwendete Werkzeuge/Versionen, ausgeführte Prüfungen, Ergebnisse
-und offene Einschränkungen. Die weiteren Dateien werden nur angelegt, wenn die
-jeweilige Ausgabe tatsächlich gewonnen wurde. Kein erfundener Pseudocode,
-keine leeren Platzhalter als vermeintlicher Analyseerfolg.
+`report.md` dokumentiert Dateiname, Größe, SHA-256, Format, Architektur,
+Werkzeugversionen, Analyseumfang, Befunde und Grenzen. Keine Zugangstokens oder
+privaten Downloadlinks speichern. Pseudocode als rekonstruierte Darstellung
+kennzeichnen; fehlende Ausgaben erklären statt leere Erfolgsdateien anzulegen.
+Bei zwei Providern kleine Ausgaben in `ghidra/` und `hopper/` trennen.
 
-Bei einem Vergleich von Ghidra und Hopper liegen deren Ausgaben in getrennten
-Unterordnern desselben Laufs. Pseudocode ist als rekonstruierte Darstellung
-zu kennzeichnen, nicht als ursprünglicher Quellcode.
+## Große Ausgaben
 
-Die vollständigen Regeln stehen in `AGENTS.md`. Rohlogs, temporäre native
-Projektdateien, Container-Daten, Zugangsdaten und Kopien der Ziel-Binärdateien
-gehören nicht in die versionierten Ergebnisse.
+GitHub blockiert normale Git-Dateien über 100 MiB. Dieses Projekt verwendet als
+vorsichtige Arbeitsgrenze unter 50 MiB pro versionierter Ergebnisdatei und
+höchstens 250 MiB neue Ergebnisse pro Lauf. Diese niedrigeren Grenzen sind
+Projektregeln. Bei Überschreitung kompakte Berichte hier speichern und vollständige
+geprüfte Exporte außerhalb des Checkouts archivieren, statt sie zu verwerfen.
 
-Dateien im Cloud-Checkout sind noch nicht automatisch auf GitHub gespeichert.
-Für die dauerhafte Ablage auf GitHub Codex ausdrücklich mit einem Ergebnis-
-Commit beziehungsweise Pull Request beauftragen. Nur geprüfte, zur
-Veröffentlichung geeignete Ergebnisse hochladen: Die Repository war bei
-Einrichtung dieses Ablaufs öffentlich.
+Mit ausdrücklicher Freigabe: große Archive als GitHub-Release-Anhänge hochladen.
+Jeder Anhang muss unter 2 GiB liegen; größere Archive beispielsweise in 1-GiB-Teile
+teilen und die Zusammenbauanleitung sichern. Alternativ nur einen vom Nutzer
+freigegebenen externen Speicher verwenden. Keine großen Archivteile ins Git
+committen und keine kostenpflichtigen Dienste oder LFS ungefragt aktivieren.
 
-Es gibt keinen automatisch beim Datei-Upload gestarteten Analysejob.
+`artifacts.json` erfasst die wirklich vorhandenen Artefakte mit Dateiname,
+Größe in Bytes, SHA-256, Status, gegebenenfalls bestätigter Downloadadresse
+sowie Teilreihenfolge. Tokens und nicht öffentliche Freigabelinks weglassen.
+Noch nicht hochgeladene Dateien als nur lokal kennzeichnen; einen Upload nicht
+allein anhand einer vorgesehenen URL als erfolgreich melden.
+
+## Veröffentlichung
+
+Der Cloud-Checkout allein ist keine dauerhafte Sicherung. Codex bei Bedarf mit
+einem Pull Request für geprüfte Ergebnisdateien beauftragen. Release-Erstellung
+und externe Uploads benötigen die entsprechende Freigabe; keine bestehenden
+Assets überschreiben. Das Repository war bei Einrichtung öffentlich: Auch
+veröffentlichte Ergebnisarchive sind keine private Ablage.
+
+Eingabebinärdateien, temporäre Projektdatenbanken, Rohlogs, Containerdaten und
+Geheimnisse nicht übernehmen. Große Text-Exporte vor jedem Upload auf sensible
+Inhalte prüfen. Vollständige Regeln: [AGENTS.md](../AGENTS.md).
+
+GitHub-Dokumentation:
+- https://docs.github.com/en/repositories/working-with-files/managing-large-files/about-large-files-on-github
+- https://docs.github.com/en/repositories/releasing-projects-on-github/about-releases
