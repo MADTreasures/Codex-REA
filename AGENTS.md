@@ -40,6 +40,23 @@ Ein Link oder Datei-Upload allein startet keinen Hintergrundjob.
 
 ### Eingaben herunterladen und schützen
 
+- Fordere bei beauftragten Dropbox-Downloads bereits vor dem ersten
+  Terminalaufruf die benötigte Netzwerkberechtigung über den vorgesehenen
+  Ausführungsmechanismus an. Verwende den erfolgreich getesteten Weg:
+  `exec_command` mit `sandbox_permissions: "with_additional_permissions"`
+  und `additional_permissions: { "network": { "enabled": true } }`,
+  ausschließlich für den betreffenden Download-Aufruf.
+- Brich bei `Operation not permitted` nicht sofort ab. Prüfe zuerst die
+  Befehlsberechtigung des fehlgeschlagenen Aufrufs und fordere gegebenenfalls
+  die reguläre Netzwerkfreigabe über denselben Mechanismus an. Erst nach
+  erteilter Freigabe wiederhole den Download einmal mit einem frisch
+  angeforderten Dropbox-Downloadlink. Führe keinen vorherigen HEAD-Aufruf aus;
+  ein solcher Aufruf kann den temporären Link bereits verbrauchen.
+- Umgehe keine Sicherheitsregeln und aktiviere keinen Vollzugriff. Behalte
+  Proxy und TLS-Prüfung unverändert bei; ändere oder veröffentliche dafür
+  keine Cloud-Konfiguration. Eine tatsächliche Host-, Proxy- oder
+  Netzwerkpolicy-Blockade bleibt ein Stopgrund: Nenne Host und Fehlermeldung.
+
 - Verwende autorisierten Dateizugriff oder einen geeigneten HTTPS-Dateilink.
   Eine Vorschau-, Login- oder CAPTCHA-Seite ist keine Binärdatei. Umgehe keine
   Zugriffs- oder Netzwerksperren. Erlaubte Weiterleitungen und Dateigröße prüfen.
