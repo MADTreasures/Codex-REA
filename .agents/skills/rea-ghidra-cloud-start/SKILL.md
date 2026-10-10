@@ -41,7 +41,7 @@ MCP-Konfigurationen oder Einstellungen der veröffentlichten Cloud-Umgebung.
    nicht davon aus, dass ein früheres `source` andere Tool-Aufrufe beeinflusst.
 
 Das Skript setzt `JAVA_HOME` und `GHIDRA_INSTALL_DIR` auf die obigen Pfade und
-ergänzt den `PATH` um REA und das Temurin-JDK. Es setzt, sofern nicht bereits
+ ergänzt den `PATH` um REA und das Temurin-JDK. Es setzt, sofern nicht bereits
 vorgegeben, `REA_ANALYSIS_PROVIDER=ghidra`, `GHIDRA_HEADLESS_MAXMEM=2G` und
 `REA_GHIDRA_STARTUP_TIMEOUT_MS=330000`. Kopiere diese Logik nicht in neue
 Installationsskripte; das vorhandene Aktivierungsskript bleibt maßgeblich.
@@ -68,12 +68,16 @@ source /workspace/.re-cloud-setup/activate.sh
 rea analyze /pfad/zur/binaerdatei --provider ghidra
 ```
 
-Für den vom Nutzer gewünschten Ordnerablauf gelten die Regeln aus `AGENTS.md`:
-Zieldateien aus `Target/` nur lesen, nicht ausführen oder ändern. Tatsächlich
-erzeugte Berichte und Text-/JSON-Ergebnisse in einem neuen Unterordner von
-`Disassembled/` speichern. Eingabeintegrität prüfen und vorhandene Ergebnisse
-nicht überschreiben. Eine Veröffentlichung auf GitHub nur nach entsprechendem
-Auftrag und nach Prüfung der Ergebnisdateien vornehmen.
+Für Eingaben und Ergebnisse gelten die aktuellen Regeln aus `AGENTS.md`:
+Lade die im Auftrag benannte externe Datei außerhalb des Repositorys herunter.
+Prüfe Format, Größe und SHA-256; führe die Eingabe nicht aus und ändere sie nicht.
+Der frühere Ordner `Target/` wurde entfernt und darf nicht neu angelegt werden.
+Speichere geprüfte kleine Berichte in einem neuen Unterordner von `Disassembled/`.
+Große Exporte bleiben außerhalb des Checkouts und werden bei entsprechender
+Freigabe als Release-Anhänge oder beim vereinbarten externen Speicher abgelegt.
+Ein kleines Artefaktverzeichnis dokumentiert Größe, Prüfsummen und bestätigte
+Uploadorte ohne private Tokens. Eingaben, große Archive und Rohlogs nicht committen.
+Veröffentlichung nur nach entsprechendem Auftrag und Prüfung der Ergebnisdateien.
 
 Ghidra benötigt temporäre Projekt-, Bridge- und Logdateien. Behandle das
 Analyseziel als unveränderlich und beachte zusätzliche Vorgaben des Nutzers zu
@@ -85,14 +89,14 @@ fehlenden Installation. Leite daraus keine Neuinstallation ab.
 
 - Ersetze keine vorhandenen Installations- oder Aktivierungsskripte.
 - Lade REA, Ghidra und Java nicht erneut herunter.
-- Übernimm keine Zugangsdaten, heruntergeladenen Analyseprogramme, Installationen
-  oder privaten Rohlogs ins Repository. Bewusst bereitgestellte Eingaben in
-  `Target/` und geprüfte Ergebnisse in `Disassembled/` sind nach den Regeln aus
-  `AGENTS.md` vorgesehen; das frühere pauschale Artefaktverbot gilt dafür nicht.
+- Übernimm keine Zugangsdaten, Eingabebinärdateien, heruntergeladenen
+  Analyseprogramme, Installationen oder privaten Rohlogs ins Repository.
+  Geprüfte kleine Ergebnisse in `Disassembled/` sind nach `AGENTS.md` vorgesehen;
+  die Anweisung ersetzt das frühere pauschale Artefaktverbot und die Target-Regeln.
 - Melde fehlende Pfade, unerwartete Versionen und fehlgeschlagene Befehle genau.
   Behaupte bei einem fehlgeschlagenen oder ausgelassenen geforderten Test keinen
   vollständigen Starterfolg.
 - Die automatische Skill-Erkennung ist weiterhin nicht nachgewiesen und keine
-  Voraussetzung für den Ordnerablauf. Lies die vorhandenen Anweisungen bei
+  Voraussetzung für den Ablauf. Lies die vorhandenen Anweisungen bei
   Bedarf direkt. Untersuche die Erkennung nur auf ausdrücklichen Auftrag;
   manuelles Lesen ist kein Beleg für einen Eintrag im Skill-Katalog.
