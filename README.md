@@ -1,90 +1,103 @@
 # Codex-REA
 
 Projekt zur Integration von OpenAI Codex mit Reverse Engineer Anything (REA).
-Ziel: Anwendungen analysieren und Reverse-Engineering-Aufgaben durchführen.
+GitHub enthält ausschließlich Projektcode, Einrichtungsdateien und Anleitungen.
+**Eingabedateien und sämtliche Analyseergebnisse werden in Dropbox abgelegt.**
 
-## Eingaben und Ergebnisse
+## Ablage
+
+Die Ordner `Target/` und `Disassembled/` gehören nicht mehr ins Git-Repository.
+Vorgesehene Struktur im vom Nutzer autorisierten Dropbox-Bereich:
 
 ```text
-Externer HTTPS-Dateilink aus dem Analyseauftrag
-    ↓ Download außerhalb des Git-Repositorys
-Statische Analyse mit REA und Ghidra bzw. Hopper
-    ↓
-Disassembled/<Dateiname>/<Lauf-ID>/
-    report.md, kleine Ausgaben und gegebenenfalls artifacts.json
-    ↓ bei großen Exporten und ausdrücklicher Freigabe
-GitHub-Release-Anhänge oder vereinbarter externer Speicher
+Codex-REA/
+├── Target/          # EXE-/ELF-Dateien des Nutzers
+└── Disassembled/
+    └── <Dateiname>/<Lauf-ID>/
+        ├── report.md
+        ├── artifacts.json
+        └── <tatsächlich erzeugte Analyseausgaben oder Ergebnisarchive>
 ```
 
-Der Ordner `Target/` wurde entfernt. Lade die EXE- oder ELF-Datei bei einem
-geeigneten Speicherdienst hoch und gib Codex den Downloadlink im Analyseauftrag.
-Die Eingabe bleibt außerhalb des Git-Checkouts und wird nicht auf GitHub kopiert.
-Ghidra ist der Standard; Hopper kann ausdrücklich gewählt werden.
+Das ist eine Ablagekonvention, keine Bestätigung, dass die Dropbox-Ordner bereits
+angelegt oder eine Verbindung eingerichtet wurde. Bei einem eingeschränkten
+App-Ordner müssen die API-Pfade zum tatsächlich freigegebenen Bereich passen.
+Die konkrete Quelle und der erlaubte Zielordner werden im Analyseauftrag benannt.
 
-Ein direkt erreichbarer HTTPS-Link ist einfacher als eine Login-, CAPTCHA-
-oder Vorschauseite. Die Cloud muss die Quelle und eventuelle Weiterleitungsdomains
-über ihre regulären Netzwerkfreigaben erreichen dürfen. Ein Freigabelink ist
-keine Uploadberechtigung für den externen Dienst. Zugangsdaten, signierte Links
-und private Freigabetokens nicht ins Repository übernehmen.
+## Ablauf
+
+1. Der Nutzer lädt die Eingabe in Dropbox hoch und nennt den Dateipfad oder
+   einen geeigneten HTTPS-Downloadlink sowie das gewünschte Analyseziel.
+2. Codex prüft zuerst den Downloadzugriff und einen tatsächlich verfügbaren,
+   autorisierten Uploadweg zum Dropbox-Ziel. Ein Leselink erlaubt keinen Upload.
+3. Die Datei wird außerhalb des Git-Checkouts heruntergeladen und statisch mit
+   REA und Ghidra analysiert. Hopper kann ausdrücklich ausgewählt werden.
+4. Berichte, Prüfsummen, Text-/JSON-Ausgaben und gegebenenfalls große Archive
+   werden in einem neuen Dropbox-Ergebnisordner gespeichert und dort überprüft.
+
+Quellprogramme nicht ausführen oder verändern. Alte Ergebnisse nicht überschreiben.
+GitHub ist weder Zwischenablage noch Ausweichziel für Analyseergebnisse: keine
+Ergebnis-Commits, Pull Requests, Releases oder LFS-Uploads. Auch kleine Berichte
+und Artefaktverzeichnisse gehören nach Dropbox, nicht ins Repository.
+
+## Zugriff und große Dateien
+
+Ein Dropbox-Downloadlink und Dropbox-Schreibzugriff sind getrennte Voraussetzungen.
+Verwende nur eine verfügbare autorisierte App-Aktion oder eine ausdrücklich
+freigegebene Dropbox-API-Verbindung. Eine verbundene ChatGPT-App beweist nicht,
+dass dieselbe Codex-Cloud-Aufgabe große lokale Dateien an diese App übergeben kann.
+Die konkrete Dateiübergabe, Uploadfunktion und deren Größenlimits müssen geprüft werden.
+
+Große API-Uploads benötigen gegebenenfalls Upload-Sessions mit begrenzten Chunks.
+Die Gesamtdatei nicht in RAM, Chat-Nachrichten oder Tool-Argumente kopieren.
+Connector-Dateireferenzen nur gemäß der jeweiligen Schnittstelle verwenden.
+Für Eingaben, Arbeitskopien und Exporte genügend Cloud- und Dropbox-Speicher einplanen.
+Ein großer Download garantiert keine vollständige Analyse innerhalb der RAM-/Zeitgrenzen.
+
+Passwörter, OAuth-Tokens und private Freigabelinks gehören nicht ins Repository,
+in veröffentlichte Konfigurationen oder in Protokolle. Kontoautorisierung über den
+vorgesehenen Anbieterprozess durchführen, keine Tokens in Chat-Nachrichten anfordern.
+Keine öffentlichen Ergebnislinks erstellen, sofern der Nutzer dies nicht verlangt.
+Ein lokal erzeugtes Ergebnis ist erst nach bestätigtem Dropbox-Upload remote gesichert.
 
 ## Beispielauftrag
-
-Den Platzhalter vor dem Absenden durch die tatsächliche Quelle ersetzen:
 
 ```text
 Verwende den aktuellen main-Stand von MADTreasures/Codex-REA und lies AGENTS.md.
 
-Quelle: <HTTPS-DOWNLOADLINK>
+Dropbox-Quelle: <DATEIPFAD ODER HTTPS-DOWNLOADLINK>
 Dateiname: <NAME.exe oder NAME.elf>
-Erwartete SHA-256: <WERT, falls vorhanden; sonst nicht vorgegeben>
+Erwartete SHA-256: <FALLS VORHANDEN>
+Dropbox-Ziel: <AUTORISIERTER ORDNER, z. B. /Codex-REA/Disassembled>
 Analyseziel: <WAS SOLL UNTERSUCHT WERDEN?>
 Provider: Ghidra
 
-Prüfe Downloadzugang und Ressourcen. Lade die Datei außerhalb des Git-Repositorys
-herunter, prüfe Format und SHA-256 und analysiere sie statisch. Führe sie nicht
-aus und lade die Eingabe nicht zu GitHub hoch.
+Prüfe vor der umfangreichen Analyse, ob Download, Dateiübergabe und Upload
+in dieser Cloud-Aufgabe tatsächlich möglich sind. Fehlt der Schreibzugriff,
+melde die konkrete fehlende Freigabe und starte noch keine große Analyse.
 
-Speichere den Bericht und kleine geprüfte Ergebnisse in einem neuen Unterordner
-von Disassembled/. Erstelle dafür einen Ergebnis-Branch und einen Pull Request,
-ohne automatisch zu mergen. Keine Zugangsdaten oder privaten Quelllinks hochladen.
+Analysiere statisch; führe die Eingabe nicht aus und ändere sie nicht.
+Speichere Bericht und alle tatsächlich erzeugten, geprüften Exporte ausschließlich
+in einem neuen Unterordner des genannten Dropbox-Ziels. Ich beauftrage damit
+auch deren Upload in diesen Ordner, ohne bestehende Dateien zu ersetzen.
 
-Für große Ergebnisarchive bereite GitHub-Release-Anhänge vor und nenne Größe und
-benötigte Veröffentlichung. Noch keinen Release ohne meine Bestätigung erstellen.
-Verwerfe oder kürze große Ausgaben nicht stillschweigend. Melde getrennt, was nur
-lokal und was tatsächlich auf GitHub gesichert ist.
-
-Keine Neuinstallation und keine Änderung der Cloud-Konfiguration.
+Nichts zu GitHub hochladen, keine öffentlichen Links erzeugen und keine
+Neuinstallation oder Änderung an der Cloud-Konfiguration durchführen.
+Berichte getrennt über Analyseergebnis und bestätigten Dropbox-Speicherstatus.
 ```
 
-## Große Ergebnisdateien
+## Umstellungsstatus
 
-Normales Git blockiert auf GitHub Dateien über 100 MiB. Wir halten versionierte
-Ergebnisse vorsichtshalber unter 50 MiB pro Datei und unter 250 MiB pro Lauf;
-diese niedrigeren Werte sind eigene Projektregeln. Große vollständige Exporte
-gehören nicht in hunderte Git-Teile, sondern in Archive außerhalb des Checkouts.
+Die Repository-Anweisungen sind auf Dropbox umgestellt. Die Installation von
+REA/Ghidra/Hopper und ihre Tests bleiben davon getrennt. Durch diese Änderung
+wurden weder ein Dropbox-Konto verbunden noch Dateien dorthin übertragen.
+Ein vollständiger Cloud-Download-/Analyse-/Dropbox-Uploadlauf ist noch zu prüfen.
+Es gibt keinen automatischen Analysejob allein durch einen Datei-Upload.
 
-Mit Veröffentlichungsfreigabe können Archive als GitHub-Release-Anhänge gespeichert
-werden: jeder Anhang muss unter 2 GiB liegen. Größere Archive lassen sich z. B. in
-1-GiB-Teile aufteilen. Der kleine Bericht bleibt in `Disassembled/`; eine
-`artifacts.json` beschreibt Größe, SHA-256, Teilreihenfolge und bestätigte
-Downloadadressen. Alternativ ist ein ausdrücklich vereinbarter externer Speicher
-möglich. Git LFS und kostenpflichtige Dienste sind dafür nicht automatisch eingerichtet.
+Details: [Projektanweisungen](AGENTS.md) und die bestehende
+[Hopper-Einrichtung](docs/hopper-cloud.md).
 
-Quellen (geprüft am 2026-10-10):
-- https://docs.github.com/en/repositories/working-with-files/managing-large-files/about-large-files-on-github
-- https://docs.github.com/en/repositories/releasing-projects-on-github/about-releases
-
-## Grenzen und Vertraulichkeit
-
-Dieser Ablauf wird über Projektanweisungen gesteuert; es gibt keinen automatischen
-Download- oder Analyse-Trigger. Er wurde mit den neuen externen Eingaben noch nicht
-praktisch getestet. Ein großer Download bedeutet nicht, dass eine vollständige
-Analyse in den verfügbaren RAM-, Speicher- und Zeitgrenzen möglich ist.
-
-Das Repository war beim Einrichten öffentlich. Veröffentlichte Berichte und
-Release-Anhänge sind dann öffentlich zugänglich, selbst wenn die ursprüngliche
-Datei privat gelagert wird. Nur dafür geeignete, autorisierte Ergebnisse freigeben.
-Ein lokaler Cloud-Pfad ist noch keine dauerhafte Sicherung auf GitHub.
-
-Details: [Ergebnisablage](Disassembled/README.md), [Projektanweisungen](AGENTS.md)
-und die unveränderte [Hopper-Einrichtung](docs/hopper-cloud.md).
+Quellen für die Zugriffseinrichtung und große Uploads:
+- https://help.dropbox.com/share/set-file-folder-permissions
+- https://help.dropbox.com/integrations/chatGPT-app
+- https://docs.dropboxapi.com/dropbox-api/api-reference/user-endpoints/files/upload-session-start
